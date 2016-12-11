@@ -1,8 +1,83 @@
 #include <iostream>
+#include <cstring>
+#define COL 40
+#define LIN 20
 using namespace std;
 
-int main ()
-{
+int mat[LIN][COL];
+int bilaX, bilaY, scor1, scor2;
+bool gameover;
 
-return 0;
+void setup2Playeri()
+{
+	gameover = false;
+	bilaX = LIN/2;
+	bilaY = COL/2;
+	scor1 = 0;
+	scor2 = 0;
+	for (int i = 0; i < COL; i++)
+	{
+		mat[0][i] = 1;
+		mat[LIN - 1][i] = 1;
+	}
+	mat[bilaX][bilaY] = 2;
+	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
+	mat[LIN / 2 - 1][COL-1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
+}
+
+void setup1Player()
+{
+	gameover = false;
+	bilaX = LIN / 2;
+	bilaY = COL / 2;
+	scor1 = 0;
+	for (int i = 0; i < COL; i++)
+	{
+		mat[0][i] = 1;
+		mat[LIN - 1][i] = 1;
+	}
+	mat[bilaX][bilaY] = 2;
+	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
+	mat[LIN / 2 - 1][COL - 1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
+}
+
+void draw()
+{
+	system("cls");
+	char c = 219;
+	
+	for(int i=0;i<LIN;i++)
+		for (int j = 0; j < COL; j++)
+		{
+			switch (mat[i][j])
+			{
+			case 0:
+				cout << " ";
+				break;
+			case 1:
+				cout << c;
+				break;
+			case 2:
+				cout << 'o';
+				break;
+			}
+			if (j == COL - 1) cout << endl;
+		}
+	cout << "Scor 1: " << scor1<< endl <<"Scor 2: "<< scor2 << endl;
+	
+}
+
+int main()
+{
+	setup2Playeri();
+	draw();
+
+	/*while (!gameover)
+	{
+		draw();
+		input();
+		logic();
+	}
+	*/
+	return 0;
 }
