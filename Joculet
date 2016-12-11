@@ -8,7 +8,7 @@ int mat[LIN][COL];
 int bilaX, bilaY, scor1, scor2;
 bool gameover;
 
-void setup2Playeri()
+void setup()
 {
 	gameover = false;
 	bilaX = LIN/2;
@@ -25,21 +25,6 @@ void setup2Playeri()
 	mat[LIN / 2 - 1][COL-1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
 }
 
-void setup1Player()
-{
-	gameover = false;
-	bilaX = LIN / 2;
-	bilaY = COL / 2;
-	scor1 = 0;
-	for (int i = 0; i < COL; i++)
-	{
-		mat[0][i] = 1;
-		mat[LIN - 1][i] = 1;
-	}
-	mat[bilaX][bilaY] = 2;
-	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
-	mat[LIN / 2 - 1][COL - 1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
-}
 
 void draw()
 {
@@ -69,7 +54,7 @@ void draw()
 
 int main()
 {
-	setup2Playeri();
+	setup();
 	draw();
 
 	/*while (!gameover)
