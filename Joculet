@@ -1,26 +1,43 @@
 #include <iostream>
 #include <cstring>
+#include <time.h>
+#include <conio.h>
 #define COL 40
 #define LIN 20
+#define STOP 0
+#define STANGA 1
+#define STANGAJOS 2
+#define STANGASUS 3
+#define DREAPTA 4
+#define DREAPTAJOS 5
+#define DREAPTASUS 6
 using namespace std;
 
+struct bila {
+	int x;
+	int y;
+	int directie;
+};
+
+bila b;
 int mat[LIN][COL];
-int bilaX, bilaY, scor1, scor2;
+int scor1, scor2;
 bool gameover;
 
 void setup()
 {
 	gameover = false;
-	bilaX = LIN/2;
-	bilaY = COL/2;
+	b.x = LIN/2;
+	b.y = COL/2;
 	scor1 = 0;
 	scor2 = 0;
+	b.directie = STOP;
 	for (int i = 0; i < COL; i++)
 	{
 		mat[0][i] = 1;
 		mat[LIN - 1][i] = 1;
 	}
-	mat[bilaX][bilaY] = 2;
+	mat[b.x][b.y] = 2;
 	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
 	mat[LIN / 2 - 1][COL-1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
 }
@@ -52,11 +69,102 @@ void draw()
 	
 }
 
+void player1MoveUp()
+{
+	if (mat[1][0]!=0)
+		for(int i=1;i<LIN-1;i++)
+			if (mat[i][0] == 1)
+			{
+				mat[i-1][0] = 1;
+				mat[i][0] = 0;
+			}
+}
+
+void player1MoveDown()
+{
+	if (mat[LIN-2][COL-1] != 0)
+		for (int i = LIN-1; i>0; i--)
+			if (mat[i][0] == 1)
+			{
+				mat[i + 1][0] = 1;
+				mat[i][0] = 0;
+			}
+}
+
+void player2MoveUp()
+{
+	if (mat[1][COL-1] != 0)
+		for (int i = 1; i<LIN-1; i++)
+			if (mat[i][0] == 1)
+			{
+				mat[i - 1][0] = 1;
+				mat[i][0] = 0;
+			}
+}
+
+void player2MoveDown()
+{
+	if (mat[LIN-2][COL-1] != 0)
+		for (int i = LIN - 2; i>0; i--)
+			if (mat[i][0] == 1)
+			{
+				mat[i + 1][0] = 1;
+				mat[i][0] = 0;
+			}
+}
+
+void input()
+{
+/*char c;
+cin >> c;
+switch (c)
+{
+case 'w':
+	player1MoveUp();
+	break;
+case 's':
+	player1MoveDown();
+	break;
+case 'i':
+	player2MoveUp();
+	break;
+case 'k':
+	player2MoveDown();
+	break;
+case 'q':
+	gameover = true;
+	break;
+}
+*/
+	if (_kbhit())
+	{
+		char current = _getch();
+		if (current == 'w')
+			player1MoveUp();
+		if (current == 's')
+			player1MoveDown();
+		if (current == 'i')
+			player2MoveUp();
+		if (current == 'k')
+			player2MoveDown();
+
+		//if (b.direction == STOP)
+			//randomDirection()
+
+		if (current == 'q')
+			gameover = true;
+	}
+
+}
+
 int main()
 {
 	setup();
-	draw();
-
+	while (!gameover)
+	{
+		draw();
+		input();
+	}
 	/*while (!gameover)
 	{
 		draw();
