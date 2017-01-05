@@ -25,6 +25,17 @@ int mat[LIN][COL];
 int scor1, scor2;
 bool gameover;
 
+void ShowConsoleCursor(bool showFlag)
+{
+	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	CONSOLE_CURSOR_INFO     cursorInfo;
+
+	GetConsoleCursorInfo(out, &cursorInfo);
+	cursorInfo.bVisible = showFlag; // set the cursor visibility
+	SetConsoleCursorInfo(out, &cursorInfo);
+}
+
 void setup()
 {
 	gameover = false;
@@ -116,27 +127,6 @@ void player2MoveDown()
 
 void input()
 {
-/*char c;
-cin >> c;
-switch (c)
-{
-case 'w':
-	player1MoveUp();
-	break;
-case 's':
-	player1MoveDown();
-	break;
-case 'i':
-	player2MoveUp();
-	break;
-case 'k':
-	player2MoveDown();
-	break;
-case 'q':
-	gameover = true;
-	break;
-}
-*/
 	if (_kbhit())
 	{
 		char current = _getch();
@@ -219,10 +209,6 @@ void logic()
 		if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 0 && mat[b.x + 1][b.y - 1] == 1) b.directie = DREAPTASUS;
 		if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 1 && mat[b.x + 1][b.y - 1] == 0) b.directie = DREAPTAJOS;
 
-	}
-	else
-	{
-
 	//PERETE SUS
 		if(mat[b.x - 1][b.y] == 1) 
 			if (mat[b.x][b.y - 1] == 1) b.directie = DREAPTAJOS;
@@ -242,10 +228,6 @@ void logic()
 			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 0 && mat[b.x + 1][b.y + 1] == 1) b.directie = STANGASUS;
 			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 1 && mat[b.x + 1][b.y + 1] == 0) b.directie = STANGAJOS;
 
-		}
-		else
-		{
-
 		//PERETE SUS
 			if (mat[b.x - 1][b.y] == 1)
 				if (mat[b.x][b.y + 1] == 1) b.directie = STANGAJOS;
@@ -264,14 +246,16 @@ void logic()
 }
 int main()
 {
+	ShowConsoleCursor(false);
+	srand(time(NULL));
 	setup();
 	while (!gameover)
 	{
 		draw();
 		input();
 		logic();
-		//move();
-		Sleep(40);
+		move();
+		Sleep(20);
 	}
 	/*while (!gameover)
 	{
