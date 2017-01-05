@@ -155,9 +155,109 @@ case 'q':
 		if (current == 'q')
 			gameover = true;
 	}
+}
+
+void reset()
+{
 
 }
 
+void move()
+{
+	mat[b.x][b.y] = 0;
+
+	switch (b.directie)
+	{
+	case STANGA:
+		b.y--;
+		break;
+	
+	case STANGAJOS:
+		b.y--;
+		b.x++;
+		break;
+
+	case STANGASUS:
+		b.y--;
+		b.x--;
+		break;
+
+	case DREAPTA:
+		b.y++;
+		break;
+
+	case DREAPTAJOS:
+		b.y++;
+		b.x++;
+		break;
+
+	case DREAPTASUS:
+		b.y++;
+		b.x--;
+		break;
+
+	}
+
+	mat[b.x][b.y] = 2;
+}
+
+void logic()
+{
+
+	if (b.directie == STOP)
+		b.directie = rand() % 6 + 1;
+
+	//DIRECTIE STANGA
+	if (b.directie >= 1 && b.directie <= 3)
+	if(b.x!=LIN-2 || b.x!=1)
+	{
+		if (mat[b.x][b.y-1] == 1 && mat[b.x - 1][b.y - 1] == 1 && mat[b.x + 1][b.y - 1] == 1) b.directie = DREAPTA;
+		if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 0 && mat[b.x + 1][b.y - 1] == 1) b.directie = DREAPTASUS;
+		if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 1 && mat[b.x + 1][b.y - 1] == 0) b.directie = DREAPTAJOS;
+
+	}
+	else
+	{
+
+	//PERETE SUS
+		if(mat[b.x - 1][b.y] == 1) 
+			if (mat[b.x][b.y - 1] == 1) b.directie = DREAPTAJOS;
+			else b.directie = STANGAJOS;
+		
+	//PERETE JOS
+		if (mat[b.x + 1][b.y] == 1) 
+			if (mat[b.x][b.y-1]==1) b.directie = DREAPTASUS;
+			else b.directie = STANGASUS;
+	}
+
+	//DIRECTIE DREAPTA
+	if (b.directie >= 4 && b.directie <= 6)
+		if (b.x != LIN - 2 || b.x != 1)
+		{
+			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 1 && mat[b.x + 1][b.y + 1] == 1) b.directie = STANGA;
+			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 0 && mat[b.x + 1][b.y + 1] == 1) b.directie = STANGASUS;
+			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 1 && mat[b.x + 1][b.y + 1] == 0) b.directie = STANGAJOS;
+
+		}
+		else
+		{
+
+		//PERETE SUS
+			if (mat[b.x - 1][b.y] == 1)
+				if (mat[b.x][b.y + 1] == 1) b.directie = STANGAJOS;
+				else b.directie = DREAPTAJOS;
+
+		//PERETE JOS
+				if (mat[b.x + 1][b.y] == 1)
+					if (mat[b.x][b.y + 1] == 1) b.directie = STANGASUS;
+					else b.directie = DREAPTASUS;
+		}
+
+	//SCORURI
+	if (b.y == 0) {scor1++; reset();}
+	if (b.y == COL-1) { scor2++; reset(); }
+
+}
 int main()
 {
 	setup();
@@ -165,6 +265,8 @@ int main()
 	{
 		draw();
 		input();
+		logic();
+		//move();
 		Sleep(40);
 	}
 	/*while (!gameover)
@@ -172,6 +274,7 @@ int main()
 		draw();
 		input();
 		logic();
+		move();
 	}
 	*/
 	return 0;
