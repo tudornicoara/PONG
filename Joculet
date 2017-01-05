@@ -159,7 +159,11 @@ case 'q':
 
 void reset()
 {
-
+	mat[b.x][b.y] = 0;
+	b.x = LIN / 2;
+	b.y = COL / 2;
+	b.directie = STOP;
+	mat[b.x][b.y] = 2;
 }
 
 void move()
