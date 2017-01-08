@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream> 
 #include <cstring>
 #include <time.h>
 #include <conio.h>
@@ -14,6 +14,8 @@
 #define DREAPTASUS 6
 using namespace std;
 
+unsigned int n, m, s, d;
+
 struct bila {
 	int x;
 	int y;
@@ -24,6 +26,21 @@ bila b;
 int mat[LIN][COL];
 int scor1, scor2;
 bool gameover;
+
+void menu(unsigned int &n, unsigned int &m)
+{
+	system("cls");
+	cout << endl << endl << endl << "       BUN VENIT IN PONG!" << endl << endl;
+	cout << "       Cati jucatori sunteti: 1 sau 2?" << endl;
+	cin >> n;
+	system("cls");
+	if (n == 1) cout <<endl<<endl<< endl << "Taste: w  si  s" << endl;
+	else cout <<endl<<endl<< endl << "Taste: w,s   si   i,k" << endl;
+	cout << "q pentru oprire a jocului" << endl;
+	cout << endl << endl << endl << "Pe ce harta doriti sa jucati?  (1,2,3)" << endl;
+	cin >> m;
+
+}
 
 void ShowConsoleCursor(bool showFlag)
 {
@@ -36,7 +53,7 @@ void ShowConsoleCursor(bool showFlag)
 	SetConsoleCursorInfo(out, &cursorInfo);
 }
 
-void setup()
+void setupMap1()
 {
 	gameover = false;
 	b.x = LIN/2;
@@ -54,6 +71,47 @@ void setup()
 	mat[LIN / 2 - 1][COL-1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
 }
 
+void setupMap2()
+{
+	gameover = false;
+	b.x = LIN / 2;
+	b.y = COL / 2;
+	scor1 = 0;
+	scor2 = 0;
+	b.directie = STOP;
+	for (int i = 0; i < COL; i++)
+	{
+		mat[0][i] = 1;
+		mat[LIN - 1][i] = 1;
+	}
+	mat[b.x][b.y] = 2;
+	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
+	mat[LIN / 2 - 1][COL - 1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
+
+	for (int i = 1; i < 6; i++)
+		mat[i][COL / 2] = mat[LIN - i - 1][COL / 2] = 1;
+
+}
+
+void setupMap3()
+{
+	gameover = false;
+	b.x = LIN / 2;
+	b.y = COL / 2;
+	scor1 = 0;
+	scor2 = 0;
+	b.directie = STOP;
+	for (int i = 0; i < COL; i++)
+	{
+		mat[0][i] = 1;
+		mat[LIN - 1][i] = 1;
+	}
+	mat[b.x][b.y] = 2;
+	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
+	mat[LIN / 2 - 1][COL - 1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
+
+	mat[LIN / 2 - 1][COL / 4 - 1] = mat[LIN / 2 - 1][COL / 4] = mat[LIN / 2-1][COL / 4 + 1]=mat[LIN/2-1][COL/4+2] = mat[LIN / 2 - 1][COL / 4 * 3 - 1] = mat[LIN / 2 - 1][COL / 4 * 3] = mat[LIN / 2-1][COL / 4 * 3 + 1] = mat[LIN / 2 - 1][COL / 4 * 3 + 2] = 1;
+}
 
 void draw()
 {
@@ -125,7 +183,7 @@ void player2MoveDown()
 			}
 }
 
-void input()
+void input2Player()
 {
 	if (_kbhit())
 	{
@@ -138,10 +196,20 @@ void input()
 			player2MoveUp();
 		if (current == 'k')
 			player2MoveDown();
+		if (current == 'q')
+			gameover = true;
+	}
+}
 
-		//if (b.direction == STOP)
-			//randomDirection()
-
+void input1Player()
+{
+	if (_kbhit())
+	{
+		char current = _getch();
+		if (current == 'w')
+			player1MoveUp();
+		if (current == 's')
+			player1MoveDown();
 		if (current == 'q')
 			gameover = true;
 	}
@@ -154,6 +222,10 @@ void reset()
 	b.y = COL / 2;
 	b.directie = STOP;
 	mat[b.x][b.y] = 2;
+	for (int i = 1; i < LIN - 1; i++)
+		mat[i][0] = mat[i][COL - 1] = 0;
+	mat[LIN / 2 - 1][0] = mat[LIN / 2][0] = mat[LIN / 2 + 1][0] = mat[LIN / 2 + 2][0] = 1;
+	mat[LIN / 2 - 1][COL - 1] = mat[LIN / 2][COL - 1] = mat[LIN / 2 + 1][COL - 1] = mat[LIN / 2 + 2][COL - 1] = 1;
 }
 
 void move()
@@ -240,30 +312,179 @@ void logic()
 		}
 
 	//SCORURI
-	if (b.y == 0) {scor1++; reset();}
-	if (b.y == COL-1) { scor2++; reset(); }
+	if (b.y == 0) {scor2++; reset();}
+	if (b.y == COL-1) { scor1++; reset(); }
 
 }
+
+void logic2()
+{
+	if (b.directie == STOP)
+		b.directie = rand() % 6 + 1;
+
+	//DIRECTIE STANGA
+	if (b.directie >= 1 && b.directie <= 3)
+		if (b.x != LIN - 2 || b.x != 1)
+		{
+			if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 1 && mat[b.x + 1][b.y - 1] == 1) b.directie = DREAPTA;
+			if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 0 && mat[b.x + 1][b.y - 1] == 1) b.directie = DREAPTASUS;
+			if (mat[b.x][b.y - 1] == 1 && mat[b.x - 1][b.y - 1] == 1 && mat[b.x + 1][b.y - 1] == 0) b.directie = DREAPTAJOS;
+
+			//PERETE SUS
+			if (mat[b.x - 1][b.y] == 1)
+				if (mat[b.x][b.y - 1] == 1) b.directie = DREAPTAJOS;
+				else b.directie = STANGAJOS;
+
+				//PERETE JOS
+				if (mat[b.x + 1][b.y] == 1)
+					if (mat[b.x][b.y - 1] == 1) b.directie = DREAPTASUS;
+					else b.directie = STANGASUS;
+		}
+
+	//DIRECTIE DREAPTA
+	if (b.directie >= 4 && b.directie <= 6)
+		if (b.x != LIN - 2 || b.x != 1)
+		{
+			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 1 && mat[b.x + 1][b.y + 1] == 1) b.directie = STANGA;
+			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 0 && mat[b.x + 1][b.y + 1] == 1) b.directie = STANGASUS;
+			if (mat[b.x][b.y + 1] == 1 && mat[b.x - 1][b.y + 1] == 1 && mat[b.x + 1][b.y + 1] == 0) b.directie = STANGAJOS;
+
+			//PERETE SUS
+			if (mat[b.x - 1][b.y] == 1)
+				if (mat[b.x][b.y + 1] == 1) b.directie = STANGAJOS;
+				else b.directie = DREAPTAJOS;
+
+				//PERETE JOS
+				if (mat[b.x + 1][b.y] == 1)
+					if (mat[b.x][b.y + 1] == 1) b.directie = STANGASUS;
+					else b.directie = DREAPTASUS;
+		}
+
+	//SCORURI
+	if (b.y == 0) { scor2++; reset(); }
+	if (b.y == COL - 1) { scor1++; reset(); }
+
+	//AI
+	if (b.directie == 2 || b.directie == 5) 
+	{
+		unsigned int j;
+		j = rand() & 10 + 1;
+		if (j>0+d-1) player2MoveDown();
+	}
+	if (b.directie == 3 || b.directie == 6)
+	{ 
+
+		unsigned int j;
+		j = rand() & 10 + 1;
+		if (j>0+d-1) player2MoveUp(); 
+	}
+}
+
+void speed(unsigned int &s)
+{
+	system("cls");
+	cout << "Cat de repede doriti sa se miste jocul?" << endl;
+	cout << "1=foarte repede       5=foarte incet" << endl;
+	cout << endl << endl << "Depinde de procesorul PC-ului, eu recomand 2"<<endl;
+	cin >> s;
+	s = s * 10;
+}
+
+void dificultate(unsigned int &d)
+{
+	system("cls");
+	cout << endl<<endl<<"Ce dificultate doriti?" << endl;
+	cout << "1=IMPOSSIBLE  2=Foarte greu  3=Greu  4=Meh  5=Noob" << endl;
+	cin >> d;
+}
+
 int main()
 {
+	speed(s);
 	ShowConsoleCursor(false);
 	srand(time(NULL));
-	setup();
-	while (!gameover)
+	menu(n,m);
+
+	if (n == 1) dificultate(d);
+
+	if (n == 2 && m==1)
 	{
-		draw();
-		input();
-		logic();
-		move();
-		Sleep(20);
+		setupMap1();
+		while (!gameover)
+		{
+			draw();
+			input2Player();
+			logic();
+			move();
+			Sleep(s);
+		}
 	}
-	/*while (!gameover)
+
+	if (n == 2 && m == 2)
 	{
-		draw();
-		input();
-		logic();
-		move();
+		setupMap2();
+		while (!gameover)
+		{
+			draw();
+			input2Player();
+			logic();
+			move();
+			Sleep(s);
+		}
 	}
-	*/
+
+
+	if (n == 2 && m == 3)
+	{
+		setupMap3();
+		while (!gameover)
+		{
+			draw();
+			input2Player();
+			logic();
+			move();
+			Sleep(s);
+		}
+	}
+	
+	if (n == 1 && m == 1)
+	{
+		setupMap1();
+		while (!gameover)
+		{
+			draw();
+			input1Player();
+			logic2();
+			move();
+			Sleep(s);
+		}
+	}
+
+	if (n == 1 && m == 2)
+	{
+		setupMap2();
+		while (!gameover)
+		{
+			draw();
+			input1Player();
+			logic2();
+			move();
+			Sleep(s);
+		}
+	}
+
+	if (n == 1 && m == 3)
+	{
+		setupMap3();
+		while (!gameover)
+		{
+			draw();
+			input1Player();
+			logic2();
+			move();
+			Sleep(s);
+		}
+	}
+
 	return 0;
 }
