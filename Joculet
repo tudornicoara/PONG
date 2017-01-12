@@ -13,7 +13,6 @@
 #define DREAPTAJOS 5
 #define DREAPTASUS 6
 using namespace std;
-
 unsigned int n, m, s, d;
 
 struct bila {
@@ -27,17 +26,53 @@ int mat[LIN][COL];
 int scor1, scor2;
 bool gameover;
 
+void ClearScreen(int x, int y)
+{
+	COORD p = { x,y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), p);
+}
+
 void menu(unsigned int &n, unsigned int &m)
 {
-	system("cls");
+	
 	cout << endl << endl << endl << "       BUN VENIT IN PONG!" << endl << endl;
 	cout << "       Cati jucatori sunteti: 1 sau 2?" << endl;
 	cin >> n;
-	system("cls");
 	if (n == 1) cout <<endl<<endl<< endl << "Taste: w  si  s" << endl;
-	else cout <<endl<<endl<< endl << "Taste: w,s   si   i,k" << endl;
+	else cout <<endl<<endl<< endl << "Taste: w,s   si   sageti" << endl;
 	cout << "q pentru oprire a jocului" << endl;
 	cout << endl << endl << endl << "Pe ce harta doriti sa jucati?  (1,2,3)" << endl;
+	
+	char harti[8][23];
+	for (int i = 0; i < 8; i++)
+		for (int j = 0; j < 23; j++)
+			harti[i][j] = 0;
+
+	for (int i = 0; i < 7; i++)
+		harti[0][i]=harti[6][i] = 219;
+	for (int i = 8; i < 15; i++)
+		harti[0][i] = harti[6][i] = 219;
+	for (int i = 16; i < 23; i++)
+		harti[0][i] = harti[6][i] = 219;
+
+	for (int i = 0; i < 7; i++)
+		harti[i][7] = harti[i][15] = '|';
+
+	harti[3][0] = harti[3][6] = harti[3][8] = harti[3][14] = harti[3][16] = harti[3][22] = 219;
+
+	harti[3][3] = harti[3][10] = harti[3][19] = 'o';
+
+	harti[1][11] = harti[2][11] = harti[4][11] = harti[5][11] = harti[2][18] = harti[3][18] = harti[2][20] = harti[3][20] = 219;
+
+	harti[7][3] = '1'; harti[7][11] = '2'; harti[7][19] = '3';
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 23; j++)
+			cout << harti[i][j];
+		cout << endl;
+	}
+	
 	cin >> m;
 
 }
@@ -115,7 +150,7 @@ void setupMap3()
 
 void draw()
 {
-	system("cls");
+	ClearScreen(0, 0);
 	char c = 219;
 	
 	for(int i=0;i<LIN;i++)
@@ -192,9 +227,9 @@ void input2Player()
 			player1MoveUp();
 		if (current == 's')
 			player1MoveDown();
-		if (current == 'i')
+		if (current == 72)
 			player2MoveUp();
-		if (current == 'k')
+		if (current == 80)
 			player2MoveDown();
 		if (current == 'q')
 			gameover = true;
@@ -312,8 +347,8 @@ void logic()
 		}
 
 	//SCORURI
-	if (b.y == 0) {scor1++; reset();}
-	if (b.y == COL-1) { scor2++; reset(); }
+	if (b.y == 0) {scor2++; reset();}
+	if (b.y == COL-1) { scor1++; reset(); }
 
 }
 
@@ -361,9 +396,10 @@ void logic2()
 		}
 
 	//SCORURI
-	if (b.y == 0) { scor1++; reset(); }
-	if (b.y == COL - 1) { scor2++; reset(); }
+	if (b.y == 0) { scor2++; reset(); }
+	if (b.y == COL - 1) { scor1++; reset(); }
 
+	//AI
 	if (b.directie == 2 || b.directie == 5) 
 	{
 		unsigned int j;
@@ -391,7 +427,6 @@ void speed(unsigned int &s)
 
 void dificultate(unsigned int &d)
 {
-	system("cls");
 	cout << endl<<endl<<"Ce dificultate doriti?" << endl;
 	cout << "1=IMPOSSIBLE  2=Foarte greu  3=Greu  4=Meh  5=Noob" << endl;
 	cin >> d;
@@ -405,6 +440,8 @@ int main()
 	menu(n,m);
 
 	if (n == 1) dificultate(d);
+
+	system("cls");
 
 	if (n == 2 && m==1)
 	{
