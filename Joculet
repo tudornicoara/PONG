@@ -349,6 +349,7 @@ void logic()
 	//SCORURI
 	if (b.y == 0) {scor2++; reset();}
 	if (b.y == COL-1) { scor1++; reset(); }
+	if (scor1 == 10 || scor2 == 10) gameover = true;
 
 }
 
@@ -398,6 +399,7 @@ void logic2()
 	//SCORURI
 	if (b.y == 0) { scor2++; reset(); }
 	if (b.y == COL - 1) { scor1++; reset(); }
+	if (scor1 == 10 || scor2 == 10) gameover = true;
 
 	//AI
 	if (b.directie == 2 || b.directie == 5) 
